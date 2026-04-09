@@ -1,0 +1,33 @@
+Arquivos para iniciar o LanguageTool oculto com o Windows
+
+1. Coloque os arquivos iniciar_languagetool.bat e iniciar_oculto.vbs na pasta principal do seu projeto.
+2. Essa pasta principal precisa ter esta estrutura:
+
+SuaPasta
+├── iniciar_languagetool.bat
+├── iniciar_oculto.vbs
+└── LanguageToolServer
+    └── LanguageTool-xxxx
+        ├── languagetool-server.jar
+        └── ...
+
+3. Teste primeiro dando dois cliques em iniciar_oculto.vbs
+4. Abra o navegador e teste
+   http://localhost:8081/v2/languages
+
+Se abrir algo no navegador, o servidor subiu certo.
+
+Para iniciar com o Windows
+
+1. Pressione Win + R
+2. Digite shell:startup
+3. Aperte Enter
+4. Na pasta que abrir, crie um atalho para iniciar_oculto.vbs
+5. Reinicie o PC e teste
+
+Observações
+
+- O script usa javaw para não abrir a janela preta do terminal.
+- A memória foi configurada com Xms256m e Xmx512m.
+- Se quiser mais folga, troque no .bat para Xmx1g.
+- Se nada abrir em localhost:8081, confirme se o Java está instalado e disponível no PATH.
