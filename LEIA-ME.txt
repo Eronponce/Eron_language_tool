@@ -1,33 +1,36 @@
-Arquivos para iniciar o LanguageTool oculto com o Windows
+LanguageTool via Docker
 
-1. Coloque os arquivos iniciar_languagetool.bat e iniciar_oculto.vbs na pasta principal do seu projeto.
-2. Essa pasta principal precisa ter esta estrutura:
+Fluxo atual recomendado:
 
-SuaPasta
-├── iniciar_languagetool.bat
-├── iniciar_oculto.vbs
-└── LanguageToolServer
-    └── LanguageTool-xxxx
-        ├── languagetool-server.jar
-        └── ...
+1. Baixe o LanguageTool com:
+   powershell -ExecutionPolicy Bypass -File .\instalar-lt.ps1
 
-3. Teste primeiro dando dois cliques em iniciar_oculto.vbs
-4. Abra o navegador e teste
-   http://localhost:8081/v2/languages
+2. Remova qualquer atalho antigo do Startup com:
+   powershell -ExecutionPolicy Bypass -File .\gerenciar-lt-docker.ps1 remove-startup
 
-Se abrir algo no navegador, o servidor subiu certo.
+3. Suba o container com:
+   powershell -ExecutionPolicy Bypass -File .\gerenciar-lt-docker.ps1 up
 
-Para iniciar com o Windows
+4. Valide a API com:
+   powershell -ExecutionPolicy Bypass -File .\gerenciar-lt-docker.ps1 test
 
-1. Pressione Win + R
-2. Digite shell:startup
-3. Aperte Enter
-4. Na pasta que abrir, crie um atalho para iniciar_oculto.vbs
-5. Reinicie o PC e teste
+5. Veja status e logs quando precisar:
+   powershell -ExecutionPolicy Bypass -File .\gerenciar-lt-docker.ps1 status
+   powershell -ExecutionPolicy Bypass -File .\gerenciar-lt-docker.ps1 logs
 
-Observações
+Endpoint local:
 
-- O script usa javaw para não abrir a janela preta do terminal.
-- A memória foi configurada com Xms256m e Xmx512m.
-- Se quiser mais folga, troque no .bat para Xmx1g.
-- Se nada abrir em localhost:8081, confirme se o Java está instalado e disponível no PATH.
+- http://localhost:8081/v2/languages
+
+Arquivos principais:
+
+- Dockerfile
+- docker-compose.yml
+- gerenciar-lt-docker.ps1
+
+Notas:
+
+- O container sobe em foreground e fica sob supervisao do Docker.
+- O compose usa restart unless-stopped, entao o servico volta sozinho quando o Docker estiver ativo.
+- Se quiser mais memoria, ajuste LT_JAVA_XMX no docker-compose.yml.
+- Os scripts iniciar_languagetool.bat e iniciar_oculto.vbs ficaram como legado e nao sao mais o caminho recomendado.

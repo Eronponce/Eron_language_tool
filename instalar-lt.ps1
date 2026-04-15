@@ -13,4 +13,4 @@ Write-Host "--- LIMPANDO ARQUIVOS TEMPORARIOS ---" -ForegroundColor Cyan
 Remove-Item $dest
 
 Write-Host "--- INSTALACAO CONCLUIDA! ---" -ForegroundColor Green
-Write-Host "Acesse a pasta $extractPath e rode o arquivo iniciar-lt.bat"
+Write-Host "Agora rode: powershell -ExecutionPolicy Bypass -File .\\gerenciar-lt-docker.ps1 up"

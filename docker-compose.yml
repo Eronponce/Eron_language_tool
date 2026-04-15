@@ -1,0 +1,18 @@
+services:
+  languagetool:
+    container_name: eron-languagetool
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${LT_HOST_PORT:-8081}:8081"
+    environment:
+      LT_PORT: "8081"
+      LT_JAVA_XMS: "${LT_JAVA_XMS:-256m}"
+      LT_JAVA_XMX: "${LT_JAVA_XMX:-512m}"
+      LT_JAVA_OPTS: "${LT_JAVA_OPTS:--XX:+UseG1GC -XX:+ExitOnOutOfMemoryError -Dfile.encoding=UTF-8}"
+      LT_ALLOW_ORIGIN: "${LT_ALLOW_ORIGIN:-*}"
+      LT_PUBLIC: "true"
+      LT_EXTRA_ARGS: "${LT_EXTRA_ARGS:-}"
+    restart: unless-stopped
+    init: true
