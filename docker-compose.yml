@@ -5,10 +5,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${LT_HOST_PORT:-8081}:8081"
+      - "8082:8081"
+    mem_limit: 700m
+    memswap_limit: 700m
     environment:
       LT_PORT: "8081"
-      LT_JAVA_XMS: "${LT_JAVA_XMS:-256m}"
+      LT_JAVA_XMS: "${LT_JAVA_XMS:-128m}"
       LT_JAVA_XMX: "${LT_JAVA_XMX:-512m}"
       LT_JAVA_OPTS: "${LT_JAVA_OPTS:--XX:+UseG1GC -XX:+ExitOnOutOfMemoryError -Dfile.encoding=UTF-8}"
       LT_ALLOW_ORIGIN: "${LT_ALLOW_ORIGIN:-*}"
@@ -16,3 +18,17 @@ services:
       LT_EXTRA_ARGS: "${LT_EXTRA_ARGS:-}"
     restart: unless-stopped
     init: true
+
+  proxy:
+    container_name: eron-languagetool-proxy
+    image: python:3.12-alpine
+    network_mode: host
+    volumes:
+      - ./docker/proxy.py:/proxy.py:ro
+    command: python /proxy.py
+    environment:
+      LT_INTERNAL_URL: "http://127.0.0.1:8082"
+      LT_PROXY_PORT: "8081"
+    depends_on:
+      - languagetool
+    restart: unless-stopped
